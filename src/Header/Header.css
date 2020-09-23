@@ -1,0 +1,39 @@
+.header {
+    background-color: #131921;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header__logo {
+    width: 100px;
+    object-fit: contain;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 18px;
+}
+
+
+.header__nav {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+}
+
+
+.header__option {
+    display: flex;
+    margin-left: 30px;
+    margin-right: 10px;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+
+.header__link {
+    color: white;
+    text-decoration: none;
+}
+
