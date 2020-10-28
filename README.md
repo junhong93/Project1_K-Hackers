@@ -1,68 +1,206 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<img src="https://i.imgur.com/AXPfb5w.png">
 
-## Available Scripts
+# Deploying a Node/Express App to Heroku
 
-In the project directory, you can run:
+## Intro
 
-### `npm start`
+Project 1 was a static application that required no code to run on a server.  However, SEI's Project 2 and beyond are full-stack web applications that need to run code on a backend server.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+[Heroku](https://www.heroku.com) is an extremely popular hosting service capable of hosting a variety of web development stacks including Node/Express, Ruby/Rails, Python/Django, and many more.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Deploying a Node/Express app to Heroku is straightforward. Just follow the steps below...
 
-### `npm test`
+## 1. Express App Prerequisites
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### PORT Number
 
-### `npm run build`
+Hosting services determine what port a Node application will listen for HTTP requests on.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Hosting services set a Node environment variable, `process.env.PORT`, that our application needs to listen on during production (not development).
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+If your Express application was generated using express-generator, you're all set thanks to this line of code in the `www` file:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+var port = normalizePort(process.env.PORT || '3000');
+```
 
-### `npm run eject`
+However, if you created your Express app "from scratch", then you need to ensure that the app listens on `process.env.PORT` if it's deployed.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Node Version
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Specifying a Node version in the `package.json` is **not** necessary.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Specifying a Start Script
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Again, you're already set if you generated your app using express-generator.
 
-## Learn More
+Otherwise, here's the [link](https://devcenter.heroku.com/articles/deploying-nodejs#specifying-a-start-script).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 2. Open a Free Account on Heroku
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Browse to [Heroku](https://www.heroku.com/) to open a free account.
 
-### Code Splitting
+Providing a credit card is not required. However, if you "verify" your account using a credit card, you get 1000 free dyno hours instead of 550, 100 free apps instead of 5, and the ability to use your own custom domains.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## 3. Install the Heroku Command Line Interface (CLI)
 
-### Analyzing the Bundle Size
+### Installation
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+The Heroku CLI makes it easy to create and manage apps in your Heroku account.
 
-### Making a Progressive Web App
+Click [here](https://devcenter.heroku.com/articles/heroku-cli#download-and-install) to find the links to download and install it for your operating system.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+### Log In
 
-### Advanced Configuration
+Once the Heroku CLI is installed, type `heroku login` anywhere in terminal and follow the instructions to log in using your Heroku account's credentials.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
 
-### Deployment
+## Deploy the App!
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+#### IMPORTANT
 
-### `npm run build` fails to minify
+> If you haven't already done so, please ensure that you are in your project folder from this point forward.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### Create the App in your Heroku Dashboard
+
+Your [Heroku Dashboard](https://dashboard.heroku.com/apps) lists all of your apps that have been deployed to Heroku.
+
+Before you can deploy a new app, you must first create the app and using the CLI is the easiest approach:
+
+```
+$ heroku create <optional preferred name of app>
+```
+
+If you don't specify the `<optional preferred name of app>` argument, Heroku will assign a randomly generated app name automatically.
+
+Keep in mind that there are thousands upon thousands of apps deployed on Heroku, so you may have to get creative when giving your app a name because it has to be unique to Heroku. Using hyphens is one way to help get the app name/URL you want.
+
+For example, this is the command used to create _SEI Students_ app:
+
+```
+$ heroku create sei-students
+```
+
+The output from the above command was:
+
+```
+Creating ⬢ sei-students... done
+https://sei-students.herokuapp.com/ | https://git.heroku.com/sei-students.git
+```
+
+Verify the command was successful by verifying that a git remote named `heroku` was created by typing:
+
+```
+$ git remote -v
+```
+
+You should see a remote name `heroku` listed, if it wasn't, try `heroku create` again with another name.
+
+### Ensure the Code is Committed to `master`
+
+Deploying to Heroku is as easy as pushing the `master` branch to the remote named `heroku`.
+
+First, make sure your code is committed (on the `master` branch):
+
+```
+$ git add -A
+$ git commit -m "Deploy to Heroku"
+```
+
+Then push the repo to Heroku:
+
+```
+$ git push heroku master
+```
+
+The above command will kick off the deployment on Heroku which may take a minute or two to complete.
+
+While the app is deploying, you will see messages from the Heroku server prefaced by `remote: `.
+
+A successful deployments will have a
+
+`remote: -----> Build succeeded!`
+
+message and ultimately a
+
+`remote: Verifying deploy... done.`
+
+toward the bottom of the output.
+
+If the deployment fails, there will be error messages that can be used to track down the issue(s).
+
+### Set the App's Environment Variables
+
+Each of the key:value pairs in your app's `.env` file must be set on Heroku using the following command:
+
+```
+$ heroku config:set KEY=VALUE
+```
+
+For example: 
+
+```
+$ heroku config:set DATABASE_URL=mongodb+srv://username:pw@sei-students-1btwt.azure.mongodb.net/students?retryWrites=true
+```
+
+Multiple key:value pairs can be space separated, or the command can be run as many times as necessary.
+
+> Note:  If using zsh, it may be necessary to quote the KEY=VALUE pair, for example:<br>`heroku config:set "DATABASE_URL=mongodb+srv://username:pw@sei-students-1btwt.azure.mongodb.net/students?retryWrites=true"`
+
+**IMPORTANT**
+
+For deployments using OAuth, be sure to use your Heroku app's hostname, **not** `localhost:3000` when setting the callbacks URL.  For example, this was the command used to set the Google OAuth callback for _sei-students_:
+
+```
+$ heroku config:set GOOGLE_CALLBACK=https://sei-students.herokuapp.com/oauth2callback
+```
+
+### Update the App's Google OAuth Registration
+
+As discussed in the OAuth lesson, the time would come after deployment that we would need to update the app's **Authorized redirect URIs**  in the [Google Developer Console](https://console.developers.google.com) for the project.
+
+Ensure that the correct project is selected in the dropdown:
+
+<img src="https://i.imgur.com/M1pB6JX.png">
+
+Click the project's **Credentials** menu choice on the left, then click the name listed in the **OAuth 2.o Client IDs**:
+
+<img src="https://i.imgur.com/dp91TAD.png"> 
+
+Now click the **+ ADD URI** button that's below **Authorized redirect URIs**:
+
+<img src="https://i.imgur.com/FGApdkD.png">
+
+Finally, enter the exact URI that you assigned to the GOOGLE_CALLBACK environment variable and click the **SAVE** button:
+
+<img src="https://i.imgur.com/d2h3Cby.png">
+
+### Browse to the App
+
+Okay, now the big moment, browse to your deployed app, e.g., https://sei-students.herokuapp.com and test it out!
+
+You can also enter the following command in terminal to open the browser to the app:
+
+```
+$ heroku open
+```
+
+### Congrats on deploying to Heroku!
+
+## Troubleshooting
+
+Deployment messages, error messages, as well as the output you typically see in your terminal when running your app during development (including output from your code's `console.log` statements) can be viewed using the following command:
+
+```
+$ heroku logs
+```
+
+Since the proper setting of environment variables is a common source of problems, use the following command to log out the list of variables set on Heroku:
+
+```
+$ heroku config
+```
+  
+
+
+
